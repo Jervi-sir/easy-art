@@ -10,10 +10,14 @@ export const Routes = {
   M5: 'M5',
   M6: 'M6',
 
-
-  JoinEventScreen: 'JoinEventScreen',
+  AuthScreen: 'AuthScreen',
+  JoinEvent: 'JoinEvent',
   CreateEventScreen: 'CreateEventScreen',
   SettingsScreen: 'SettingsScreen',
+PaymentScreen: 'PaymentScreen',
+EditProfileScreen: 'EditProfileScreen', 
+  HelpCenterScreen: 'HelpCenterScreen',
+
 
   
 }

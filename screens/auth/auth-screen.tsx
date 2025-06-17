@@ -1,84 +1,257 @@
-// AuthScreen.js
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView, ScrollView, Image } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    TextInput,
+    SafeAreaView,
+    ScrollView,
+    TouchableWithoutFeedback,
+    KeyboardAvoidingView,
+    Platform,
+    Keyboard,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../utils/constants/colors';
+import { useAuthStore } from 'zustand/auth.store';
+
+const LoginForm = ({
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isPasswordVisible,
+    setPasswordVisible,
+    handleLogin,
+}: any) => (
+    <>
+        <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+        />
+        <View style={styles.passwordContainer}>
+            <TextInput
+                style={styles.input}
+                placeholder="Mot de passe"
+                secureTextEntry={!isPasswordVisible}
+                value={password}
+                onChangeText={setPassword}
+            />
+            <TouchableOpacity
+                onPress={() => setPasswordVisible(!isPasswordVisible)}
+                style={styles.eyeIcon}
+            >
+                <Ionicons
+                    name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
+                    size={24}
+                    color={COLORS.darkGray}
+                />
+            </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.mainButton} onPress={handleLogin}>
+            <Text style={styles.mainButtonText}>Se connecter</Text>
+        </TouchableOpacity>
+    </>
+);
+
+const SignupForm = ({
+    fullName,
+    setFullName,
+    phoneNumber,
+    setPhoneNumber,
+    address,
+    setAddress,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSignup,
+}: any) => (
+    <>
+        <TextInput
+            style={styles.input}
+            placeholder="Nom complet"
+            value={fullName}
+            onChangeText={setFullName}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Numéro de téléphone"
+            keyboardType="phone-pad"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Adresse"
+            value={address}
+            onChangeText={setAddress}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Mot de passe"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+        />
+        <TouchableOpacity style={styles.mainButton} onPress={handleSignup}>
+            <Text style={styles.mainButtonText}>S'inscrire</Text>
+        </TouchableOpacity>
+    </>
+);
 
 const AuthScreen = () => {
-    const [activeTab, setActiveTab] = useState('login'); // 'login' or 'signup'
+    const [activeTab, setActiveTab] = useState('login');
     const [isPasswordVisible, setPasswordVisible] = useState(false);
 
-    const LoginForm = () => (
-        <>
-            <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
-            <View style={styles.passwordContainer}>
-                <TextInput style={styles.input} placeholder="Mot de passe" secureTextEntry={!isPasswordVisible} />
-                <TouchableOpacity onPress={() => setPasswordVisible(!isPasswordVisible)} style={styles.eyeIcon}>
-                    <Ionicons name={isPasswordVisible ? "eye-off-outline" : "eye-outline"} size={24} color={COLORS.darkGray} />
-                </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={styles.mainButton}>
-                <Text style={styles.mainButtonText}>Se connecter</Text>
-            </TouchableOpacity>
-        </>
-    );
+    const { login, signup } = useAuthStore();
 
-    const SignupForm = () => (
-        <>
-            <TextInput style={styles.input} placeholder="Nom complet" />
-            <TextInput style={styles.input} placeholder="Numéro de téléphone" keyboardType="phone-pad" />
-            <TextInput style={styles.input} placeholder="Adresse" />
-            <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
-            <TextInput style={styles.input} placeholder="Mot de passe" secureTextEntry />
-            <TouchableOpacity style={styles.mainButton}>
-                <Text style={styles.mainButtonText}>S'inscrire</Text>
-            </TouchableOpacity>
-        </>
-    );
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+
+    const handleLogin = useCallback(async () => {
+        await login({ email, pass: password });
+    }, [email, password, login]);
+
+    const handleSignup = useCallback(async () => {
+        await signup({ fullName, phoneNumber, address, email, password });
+    }, [fullName, phoneNumber, address, email, password, signup]);
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView bounces={false} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-                <View style={styles.header}>
-                    {/* <Image source={require('./assets/logo-purple.png')} style={styles.logo} /> */}
-                    <Text style={styles.appName}>EasyArt</Text>
-                    <Text style={styles.tagline}>Découvrez et partagez vos talents artistiques</Text>
-                </View>
-                
-                <View style={styles.tabContainer}>
-                    <TouchableOpacity onPress={() => setActiveTab('login')} style={[styles.tab, activeTab === 'login' && styles.activeTab]}>
-                        <Text style={[styles.tabText, activeTab === 'login' && styles.activeTabText]}>Connexion</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setActiveTab('signup')} style={[styles.tab, activeTab === 'signup' && styles.activeTab]}>
-                        <Text style={[styles.tabText, activeTab === 'signup' && styles.activeTabText]}>Inscription</Text>
-                    </TouchableOpacity>
-                </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={styles.container}
+                >
+                    <ScrollView
+                        bounces={false}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={styles.scrollContent}
+                    >
+                        <View style={styles.header}>
+                            <Text style={styles.appName}>EasyArt</Text>
+                            <Text style={styles.tagline}>
+                                Découvrez et partagez vos talents artistiques
+                            </Text>
+                        </View>
 
-                {activeTab === 'login' ? <LoginForm /> : <SignupForm />}
-            </ScrollView>
-        </SafeAreaView>
-    );
+                        <View style={styles.tabContainer}>
+                            <TouchableOpacity
+                                onPress={() => setActiveTab('login')}
+                                style={[
+                                    styles.tab,
+                                    activeTab === 'login' && styles.activeTab,
+                                ]}
+                            >
+                                <Text
+                                    style={[
+                                        styles.tabText,
+                                        activeTab === 'login' && styles.activeTabText,
+                                    ]}
+                                >
+                                    Connexion
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => setActiveTab('signup')}
+                                style={[styles.tab, activeTab === 'signup' && styles.activeTab]}
+                            >
+                                <Text
+                                    style={[styles.tabText, activeTab === 'signup' && styles.activeTabText]}
+                                >
+                                    Inscription
+                                </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {activeTab === 'login' ? (
+                        <LoginForm
+                            email={email}
+                            setEmail={setEmail}
+                            password={password}
+                            setPassword={setPassword}
+                            isPasswordVisible={isPasswordVisible}
+                            setPasswordVisible={setPasswordVisible}
+                            handleLogin={handleLogin}
+                        />
+                    ) : (
+                        <SignupForm
+                            fullName={fullName}
+                            setFullName={setFullName}
+                            phoneNumber={phoneNumber}
+                            setPhoneNumber={setPhoneNumber}
+                            address={address}
+                            setAddress={setAddress}
+                            email={email}
+                            setEmail={setEmail}
+                            password={password}
+                            setPassword={setPassword}
+                            handleSignup={handleSignup}
+                        />
+                    )}
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+    </SafeAreaView>
+);
 };
 
-// ... Add StyleSheet below
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: COLORS.white },
     scrollContent: { padding: 20, paddingTop: 50 },
     header: { alignItems: 'center', marginBottom: 30 },
-    logo: { width: 60, height: 60 },
-    appName: { fontSize: 24, fontWeight: 'bold', color: COLORS.primary, marginTop: 10 },
+    appName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: COLORS.primary,
+        marginTop: 10,
+    },
     tagline: { fontSize: 16, color: COLORS.darkGray, marginTop: 5 },
-    tabContainer: { flexDirection: 'row', backgroundColor: COLORS.gray, borderRadius: 15, padding: 5, marginBottom: 20 },
-    tab: { flex: 1, paddingVertical: 12, borderRadius: 12, alignItems: 'center' },
+    tabContainer: {
+        flexDirection: 'row',
+        backgroundColor: COLORS.gray,
+        borderRadius: 4,
+        padding: 5,
+        marginBottom: 20,
+    },
+    tab: { flex: 1, paddingVertical: 12, borderRadius: 5, alignItems: 'center'},
     activeTab: { backgroundColor: COLORS.white },
     tabText: { color: COLORS.darkGray, fontSize: 16, fontWeight: '600' },
     activeTabText: { color: COLORS.primary },
-    input: { backgroundColor: COLORS.gray, padding: 18, borderRadius: 12, fontSize: 16, marginBottom: 15 },
+    input: {
+        backgroundColor: COLORS.gray,
+        padding: 20,
+        borderRadius: 5,
+        fontSize: 16,
+        marginBottom: 15,
+    },
     passwordContainer: { position: 'relative', justifyContent: 'center' },
     eyeIcon: { position: 'absolute', right: 20 },
-    mainButton: { backgroundColor: COLORS.primary, padding: 18, borderRadius: 12, alignItems: 'center', marginTop: 10 },
+    mainButton: {
+        backgroundColor: COLORS.primary,
+        padding: 18,
+        borderRadius: 12,
+        alignItems: 'center',
+        marginTop: 10,
+    },
     mainButtonText: { color: COLORS.white, fontSize: 18, fontWeight: 'bold' },
 });
-
 
 export default AuthScreen;
