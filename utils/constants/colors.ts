@@ -1,0 +1,14 @@
+export const COLORS = {
+  primary: '#5D3FD3', // A shade of purple
+  primaryLight: '#7B68EE',
+  secondary: '#FF6347',
+  white: '#FFFFFF',
+  black: '#000000',
+  gray: '#F0F2F5',
+  darkGray: '#8A8A8A',
+  lightGray: '#F5F5F5',
+  green: '#28a745',
+  blueInfoBg: '#e7f3ff',
+  blueInfoText: '#004085',
+  red: '#DC3545',
+};
