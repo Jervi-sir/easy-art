@@ -8,6 +8,8 @@ import M4Navigation from './m4/m4-navigation';
 import M5Navigation from './m5/m5-navigation';
 import { Routes } from '@utils/constants/Routes';
 import M6Navigation from './m6/m6-navigation';
+import { Feather } from '@expo/vector-icons';
+import { COLORS } from '@utils/constants/colors';
 
 const Tab = createBottomTabNavigator();
 const { width } = Dimensions.get('screen');
@@ -27,7 +29,7 @@ export const NavigationScreen = () => {
           tabBarStyle: {
             backgroundColor: 'white',
             paddingTop: 5,
-            height: Platform.OS === "ios" ? 50 : 60,
+            height: Platform.OS === "ios" ? 80 : 60,
           },
           tabBarLabelStyle: {
             fontSize: 12,
@@ -40,9 +42,9 @@ export const NavigationScreen = () => {
         {[
           { key: Routes.M1, routeName: Routes.M1, component: M1Navigation, Icon: HomeIcon, title: 'Accueil' },
           { key: Routes.M2, routeName: Routes.M2, component: M2Navigation, Icon: SparksIcon, title: 'Recherche' },
-          { key: Routes.M3, routeName: Routes.M3, component: M3Navigation, Icon: ArchiveIcon, title: 'Evenement' },
+          { key: Routes.M3Test, routeName: Routes.M3Test, component: M3Navigation, Icon: ArchiveIcon, title: 'Evenement' },
           { key: Routes.M4, routeName: Routes.M4, component: M4Navigation, Icon: InboxIcon, title: 'Favoris' },
-          { key: Routes.M5, routeName: Routes.M5, component: M5Navigation, Icon: ProfileIcon, title: 'Abonnement' },
+          { key: Routes.M5, routeName: Routes.M5, component: M5Navigation, Icon: SubscriptionIcon, title: 'Abonnement' },
           { key: Routes.M6, routeName: Routes.M6, component: M6Navigation, Icon: ProfileIcon, title: 'Profil' },
         ].map((tab: any, index) => (
           <Tab.Screen
@@ -52,11 +54,14 @@ export const NavigationScreen = () => {
             options={{
               tabBarLabel: ({ focused }) => (
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{
-                    color: 'black',
-                    fontSize: 11,
-                    fontWeight: '500',
-                  }}>
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode='tail'
+                    style={{
+                      color: focused ? COLORS.primary : COLORS.darkGray,
+                      fontSize: 11,
+                      fontWeight: '500',
+                    }}>
                     {tab.title}
                   </Text>
                 </View>
@@ -70,11 +75,11 @@ export const NavigationScreen = () => {
               },
               tabBarIcon: ({ focused, color }) => (
                 <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: Platform.OS === "ios" ? 0 : -6, height: 42, width: menuIconWidth }}>
-                  <tab.Icon isActive={focused} color={'black'} />
+                  <tab.Icon isActive={focused} />
                 </View>
               ),
             }}
-            
+
           />
         ))
         }
@@ -83,8 +88,9 @@ export const NavigationScreen = () => {
   );
 };
 
-const HomeIcon = ({ isActive, color }: any) => <Text style={{ color }}>🏠</Text>;
-const SparksIcon = ({ isActive, color }: any) => <Text style={{ color }}>✨</Text>;
-const ArchiveIcon = ({ isActive, color }: any) => <Text style={{ color }}>📦</Text>;
-const InboxIcon = ({ isActive, color }: any) => <Text style={{ color }}>📥</Text>;
-const ProfileIcon = ({ isActive, color }: any) => <Text style={{ color }}>👤</Text>;
+const HomeIcon = ({ isActive }: any) => <Feather name="home" size={24} style={{ color: isActive ? COLORS.primary : COLORS.darkGray }} />;
+const SparksIcon = ({ isActive }: any) => <Feather name="search" size={24} style={{ color: isActive ? COLORS.primary : COLORS.darkGray }} />;
+const ArchiveIcon = ({ isActive }: any) => <Feather name="calendar" size={24} style={{ color: isActive ? COLORS.primary : COLORS.darkGray }} />;
+const InboxIcon = ({ isActive }: any) => <Feather name="heart" size={24} style={{ color: isActive ? COLORS.primary : COLORS.darkGray }} />;
+const ProfileIcon = ({ isActive }: any) => <Feather name="user" size={24} style={{ color: isActive ? COLORS.primary : COLORS.darkGray }} />;
+const SubscriptionIcon = ({ isActive }: any) => <Feather name="credit-card" size={24} style={{ color: isActive ? COLORS.primary : COLORS.darkGray }} />;

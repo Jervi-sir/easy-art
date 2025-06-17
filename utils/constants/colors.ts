@@ -1,4 +1,5 @@
 export const COLORS = {
+  background: '#F9F9FB',
   primary: '#5D3FD3', // A shade of purple
   primaryLight: '#7B68EE',
   secondary: '#FF6347',
@@ -11,4 +12,7 @@ export const COLORS = {
   blueInfoBg: '#e7f3ff',
   blueInfoText: '#004085',
   red: '#DC3545',
+  orange: '#F9A825',
+  gold: '#FFD700',
+  lightPurple: '#E9E4F8',
 };

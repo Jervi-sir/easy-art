@@ -11,7 +11,7 @@ const PaymentScreen = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: COLORS.white}}>
-    <ScrollView style={styles.container}>
+    <ScrollView bounces={false} showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity>
           <Ionicons name="arrow-back" size={24} color={COLORS.black} />

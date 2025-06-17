@@ -6,16 +6,21 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import WelcomeScreen from '@screens/welcome/welcome-screen';
 import { Routes } from '@utils/constants/Routes';
 import { NavigationScreen } from '@screens/navigation-screen';
+import JoinEventScreen from '@screens/m3/join-event-screen';
+import { StatusBarTop } from '@components/status-bar-top';
+import CreateEventScreen from '@screens/m3/create-event-screen';
+import SettingsScreen from '@screens/m6/setting-screen';
 
 export default function App() {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <>
+      <StatusBarTop />
       <GestureHandlerRootView>
         <NavigationContainer >
           <Navigation />
         </NavigationContainer>
       </GestureHandlerRootView>
-    </SafeAreaView>
+    </>
 
   );
 }
@@ -37,8 +42,12 @@ const Navigation = () => {
         // initialRouteName={initialRoute} 
       >
         {[
-          { name: 'Routes.NavigationScreen', component: NavigationScreen },
+          { name: Routes.NavigationScreen, component: NavigationScreen },
           { name: Routes.WelcomeScreen, component: WelcomeScreen },
+          { name: Routes.JoinEventScreen, component: JoinEventScreen },
+          { name: Routes.CreateEventScreen, component: CreateEventScreen },
+          { name: Routes.SettingsScreen, component: SettingsScreen },
+
 
         ].map((item, index) => (
           <Stack.Screen

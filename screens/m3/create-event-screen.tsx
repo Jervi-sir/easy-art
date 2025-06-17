@@ -1,22 +1,20 @@
-// CreateEventScreen.js
 import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Platform,
   Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-// For a better picker experience, you might install:
-// npx expo install @react-native-picker/picker
-// import { Picker } from '@react-native-picker/picker';
-
+import { COLORS } from '@utils/constants/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateEventScreen = () => {
+  const navigation: any = useNavigation();
+
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [address, setAddress] = useState('');
@@ -25,87 +23,174 @@ const CreateEventScreen = () => {
   const [price, setPrice] = useState('100');
   const [image, setImage] = useState(null);
 
-  // In a real app, you would use expo-image-picker
   const handlePickImage = () => {
-    // Placeholder for image picker logic
     console.log('Pick image');
   };
 
   return (
-    <View style={styles.safeArea}>
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <ScrollView
-        style={styles.container}
+        style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}>
-        {/* --- Header --- */}
-        <View style={styles.header}>
-          <TouchableOpacity>
-            <Ionicons name="arrow-back" size={24} color="#333" />
+        {/* Header */}
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 20,
+          paddingHorizontal: 20,
+          paddingTop: 20,
+          paddingBottom: 20,
+          backgroundColor: COLORS.primary,
+        }}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Créer un événement</Text>
-          <View style={{ width: 24 }} />
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: COLORS.white }}>Créer un événement</Text>
         </View>
 
-        {/* --- Photo Section --- */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Photo de l'événement *</Text>
-          <TouchableOpacity style={styles.imagePicker} onPress={handlePickImage}>
+        {/* Photo Section */}
+        <View style={{
+          backgroundColor: '#fff',
+          marginHorizontal: 20,
+          marginTop: 20,
+          padding: 20,
+          borderRadius: 15,
+        }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 15 }}>
+            Photo de l'événement *
+          </Text>
+          <TouchableOpacity 
+            style={{
+              height: 150,
+              borderWidth: 2,
+              borderColor: '#e0e0e0',
+              borderStyle: 'dashed',
+              borderRadius: 15,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#fafafa',
+            }} 
+            onPress={handlePickImage}
+          >
             {image ? (
-              <Image source={{ uri: image }} style={styles.eventImage} />
+              <Image 
+                source={{ uri: image }} 
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 13,
+                }} 
+              />
             ) : (
               <>
-                <Ionicons name="camera-outline" size={32} color="#8A2BE2" />
-                <Text style={styles.imagePickerText}>Ajouter une photo</Text>
-                <Text style={styles.imagePickerSubText}>Recommandé: 1200x800px</Text>
+                <Ionicons name="camera-outline" size={32} color={COLORS.primary} />
+                <Text style={{ fontSize: 16, color: '#333', marginTop: 10 }}>
+                  Ajouter une photo
+                </Text>
+                <Text style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+                  Recommandé: 1200x800px
+                </Text>
               </>
             )}
           </TouchableOpacity>
         </View>
 
-        {/* --- Basic Info Section --- */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Informations de base</Text>
-          <Text style={styles.label}>Nom de l'événement *</Text>
+        {/* Basic Info Section */}
+        <View style={{
+          backgroundColor: '#fff',
+          marginHorizontal: 20,
+          marginTop: 20,
+          padding: 20,
+          borderRadius: 15,
+        }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 15 }}>
+            Informations de base
+          </Text>
+          
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 }}>
+            Nom de l'événement *
+          </Text>
           <TextInput
             placeholder="Ex: Exposition de peinture moderne"
-            style={styles.input}
+            style={{
+              backgroundColor: '#f0f0f7',
+              padding: 15,
+              borderRadius: 10,
+              fontSize: 16,
+            }}
             value={eventName}
             onChangeText={setEventName}
           />
 
-          <Text style={styles.label}>Date de l'événement</Text>
-          <View style={styles.dateInputContainer}>
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 }}>
+            Date de l'événement
+          </Text>
+          <View style={{ position: 'relative', justifyContent: 'center' }}>
             <TextInput
               placeholder="jj/mm/aaaa"
-              style={styles.input}
+              style={{
+                backgroundColor: '#f0f0f7',
+                padding: 15,
+                borderRadius: 10,
+                fontSize: 16,
+              }}
               value={eventDate}
               onChangeText={setEventDate}
             />
-             <Ionicons name="calendar-outline" size={24} color="#888" style={styles.inputIcon} />
+            <Ionicons 
+              name="calendar-outline" 
+              size={24} 
+              color="#888" 
+              style={{ position: 'absolute', right: 15 }} 
+            />
           </View>
 
-
-          <Text style={styles.label}>Adresse</Text>
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 }}>
+            Adresse
+          </Text>
           <TextInput
             placeholder="Ex: Centre culturel, Oran"
-            style={styles.input}
+            style={{
+              backgroundColor: '#f0f0f7',
+              padding: 15,
+              borderRadius: 10,
+              fontSize: 16,
+            }}
             value={address}
             onChangeText={setAddress}
           />
 
-          <Text style={styles.label}>Catégorie</Text>
-          {/* A Picker would be ideal here */}
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 }}>
+            Catégorie
+          </Text>
           <TextInput
             placeholder="Sélectionnez une catégorie"
-            style={styles.input}
+            style={{
+              backgroundColor: '#f0f0f7',
+              padding: 15,
+              borderRadius: 10,
+              fontSize: 16,
+            }}
             value={category}
             onChangeText={setCategory}
           />
 
-          <Text style={styles.label}>Description</Text>
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 }}>
+            Description
+          </Text>
           <TextInput
             placeholder="Décrivez votre événement..."
-            style={[styles.input, styles.textArea]}
+            style={{
+              backgroundColor: '#f0f0f7',
+              padding: 15,
+              borderRadius: 10,
+              fontSize: 16,
+              height: 100,
+              textAlignVertical: 'top',
+            }}
             multiline
             numberOfLines={4}
             value={description}
@@ -113,124 +198,76 @@ const CreateEventScreen = () => {
           />
         </View>
 
-        {/* --- Pricing Section --- */}
-        <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Tarification</Text>
-            <Text style={styles.label}>Prix d'inscription par participant (DA)</Text>
-            <TextInput
-                style={styles.input}
-                value={price}
-                onChangeText={setPrice}
-                keyboardType="numeric"
-            />
-            <View style={styles.suggestionBox}>
-                <Text style={styles.suggestionTitle}>Prix suggérés par catégorie:</Text>
-                <Text style={styles.suggestionText}>• Ateliers (Cuisine, Dessin): 200-500 DA</Text>
-                <Text style={styles.suggestionText}>• Concerts, Spectacles: 800-800 DA</Text>
-                <Text style={styles.suggestionText}>• Expositions: 100-300 DA</Text>
-                <Text style={styles.suggestionText}>• Formations: 500-1500 DA</Text>
-            </View>
+        {/* Pricing Section */}
+        <View style={{
+          backgroundColor: '#fff',
+          marginHorizontal: 20,
+          marginTop: 20,
+          padding: 20,
+          borderRadius: 15,
+        }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 15 }}>
+            Tarification
+          </Text>
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 }}>
+            Prix d'inscription par participant (DA)
+          </Text>
+          <TextInput
+            style={{
+              backgroundColor: '#f0f0f7',
+              padding: 15,
+              borderRadius: 10,
+              fontSize: 16,
+            }}
+            value={price}
+            onChangeText={setPrice}
+            keyboardType="numeric"
+          />
+          <View style={{
+            backgroundColor: '#f0f0f7',
+            borderRadius: 10,
+            padding: 15,
+            marginTop: 15,
+          }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#333', marginBottom: 8 }}>
+              Prix suggérés par catégorie:
+            </Text>
+            <Text style={{ fontSize: 13, color: '#555', lineHeight: 20 }}>
+              • Ateliers (Cuisine, Dessin): 200-500 DA
+            </Text>
+            <Text style={{ fontSize: 13, color: '#555', lineHeight: 20 }}>
+              • Concerts, Spectacles: 800-800 DA
+            </Text>
+            <Text style={{ fontSize: 13, color: '#555', lineHeight: 20 }}>
+              • Expositions: 100-300 DA
+            </Text>
+            <Text style={{ fontSize: 13, color: '#555', lineHeight: 20 }}>
+              • Formations: 500-1500 DA
+            </Text>
+          </View>
         </View>
+
+      {/* Footer Button */}
+      <View style={{
+        padding: 20,
+      }}>
+        <TouchableOpacity style={{
+          backgroundColor: COLORS.primary,
+          padding: 18,
+          borderRadius: 15,
+          alignItems: 'center',
+        }}>
+          <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
+            Créer l'événement (Abonnement requis: 150 DA)
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       </ScrollView>
 
-       {/* --- Footer Button --- */}
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.submitButton}>
-          <Text style={styles.submitButtonText}>Créer l'événement (Abonnement requis: 150 DA)</Text>
-        </TouchableOpacity>
-      </View>
+
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f0f0f7' },
-  container: { flex: 1 },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === 'android' ? 40 : 60,
-    paddingBottom: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  headerTitle: { fontSize: 20, fontWeight: 'bold' },
-  section: {
-    backgroundColor: '#fff',
-    marginHorizontal: 20,
-    marginTop: 20,
-    padding: 20,
-    borderRadius: 15,
-  },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 15 },
-  label: { fontSize: 14, color: '#666', marginBottom: 8, marginTop: 10 },
-  input: {
-    backgroundColor: '#f0f0f7',
-    padding: 15,
-    borderRadius: 10,
-    fontSize: 16,
-  },
-  dateInputContainer: { position: 'relative', justifyContent: 'center' },
-  inputIcon: { position: 'absolute', right: 15 },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  imagePicker: {
-    height: 150,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    borderStyle: 'dashed',
-    borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fafafa',
-  },
-  eventImage: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 13,
-  },
-  imagePickerText: { fontSize: 16, color: '#333', marginTop: 10 },
-  imagePickerSubText: { fontSize: 12, color: '#888', marginTop: 4 },
-  suggestionBox: {
-      backgroundColor: '#f0f0f7',
-      borderRadius: 10,
-      padding: 15,
-      marginTop: 15,
-  },
-  suggestionTitle: {
-      fontSize: 14,
-      fontWeight: 'bold',
-      color: '#333',
-      marginBottom: 8,
-  },
-  suggestionText: {
-      fontSize: 13,
-      color: '#555',
-      lineHeight: 20,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 20,
-    backgroundColor: '#f0f0f7',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-  },
-  submitButton: {
-    backgroundColor: '#8A2BE2',
-    padding: 18,
-    borderRadius: 15,
-    alignItems: 'center',
-  },
-  submitButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-});
 
 export default CreateEventScreen;

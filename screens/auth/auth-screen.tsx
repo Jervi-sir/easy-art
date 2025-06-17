@@ -38,7 +38,7 @@ const AuthScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            <ScrollView bounces={false} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
                     {/* <Image source={require('./assets/logo-purple.png')} style={styles.logo} /> */}
                     <Text style={styles.appName}>EasyArt</Text>
