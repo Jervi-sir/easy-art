@@ -3,11 +3,10 @@ import { View, Text, TouchableOpacity, ScrollView, Platform, StyleSheet } from '
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS } from '@utils/constants/colors';
-import { useNavigation } from '@react-navigation/native'; // Import Navigation
-import { Routes } from '@utils/constants/Routes'; // Import Routes
+import { useNavigation } from '@react-navigation/native';
+import { Routes } from '@utils/constants/Routes';
 import { useAuthStore } from 'zustand/auth.store';
 
-// These sub-components can remain as they are
 const FeatureItem = ({ icon, title, description }: any) => (
   <View style={{
     flexDirection: 'row',
@@ -53,7 +52,6 @@ const ComparisonRow = ({ label, freeValue, premiumValue }: any) => (
 );
 
 const SubscriptionScreen = () => {
-  // Get user status and navigation handler
   const { user } = useAuthStore();
   const navigation: any = useNavigation();
 
@@ -65,7 +63,6 @@ const SubscriptionScreen = () => {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
         {/* Gradient Header */}
-        
         <LinearGradient
           colors={[COLORS.primary, COLORS.primaryLight]}
           style={styles.gradientHeader}
@@ -83,14 +80,12 @@ const SubscriptionScreen = () => {
         {/* --- DYNAMIC SUBSCRIPTION CARD --- */}
         <View style={styles.card}>
           {user?.isPremium ? (
-            // --- VIEW FOR ALREADY-PREMIUM USERS ---
             <View style={styles.premiumUserView}>
               <Ionicons name="checkmark-circle" size={60} color={COLORS.green} />
               <Text style={styles.premiumTitle}>Vous êtes un membre Premium</Text>
               <Text style={styles.premiumSubtitle}>Profitez de toutes les fonctionnalités exclusives d'EasyArt!</Text>
             </View>
           ) : (
-            // --- VIEW FOR NON-PREMIUM USERS ---
             <>
               <View style={styles.popularBadge}>
                 <Text style={styles.popularText}>Populaire</Text>
@@ -122,7 +117,6 @@ const SubscriptionScreen = () => {
         </View>
 
         {/* --- DYNAMIC FOOTER & CTA BUTTON --- */}
-        {/* This entire section is hidden if the user is already premium */}
         {!user?.isPremium && (
           <View style={{ padding: 20 }}>
             <TouchableOpacity style={styles.ctaButton} onPress={handleUpgradePress}>
@@ -139,7 +133,6 @@ const SubscriptionScreen = () => {
   );
 };
 
-// --- Styles have been organized here for clarity ---
 const styles = StyleSheet.create({
   header: { position: 'absolute', top: 0, left: 0, zIndex: 10, flexDirection: 'row', alignItems: 'center', gap: 20, paddingHorizontal: 20, paddingTop: Platform.OS === 'android' ? 30 : 20, paddingBottom: 15 },
   backButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
@@ -147,11 +140,9 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 28, fontWeight: 'bold', color: '#fff' },
   headerSubtitle: { fontSize: 16, color: 'rgba(255, 255, 255, 0.8)', marginTop: 5 },
   card: { backgroundColor: '#fff', marginHorizontal: 20, borderRadius: 20, padding: 25, marginTop: -60, shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 15, elevation: 10, alignItems: 'center' },
-  // Premium User View Styles
   premiumUserView: { alignItems: 'center', paddingVertical: 20 },
   premiumTitle: { fontSize: 18, fontWeight: 'bold', color: COLORS.darkGray, marginTop: 15 },
   premiumSubtitle: { fontSize: 14, color: COLORS.darkGray, textAlign: 'center', marginTop: 5 },
-  // Non-Premium View Styles
   popularBadge: { position: 'absolute', top: 20, right: -10, backgroundColor: '#FFA500', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 15, transform: [{ rotate: '15deg' }] },
   popularText: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
   planTitle: { fontSize: 18, fontWeight: '600', color: COLORS.darkGray },
@@ -161,9 +152,7 @@ const styles = StyleSheet.create({
   planDescription: { fontSize: 14, color: COLORS.darkGray, textAlign: 'center', marginBottom: 20 },
   trialBadge: { flexDirection: 'row', backgroundColor: '#FFF8DC', paddingVertical: 10, paddingHorizontal: 15, borderRadius: 12, alignItems: 'center' },
   trialText: { color: '#D2691E', fontWeight: 'bold', marginLeft: 8 },
-  // Common Section Styles
   sectionTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 15, color: '#343a40' },
-  // Footer CTA Styles
   ctaButton: { flexDirection: 'row', backgroundColor: COLORS.primary, padding: 18, borderRadius: 15, justifyContent: 'center', alignItems: 'center', shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 5, elevation: 8 },
   ctaButtonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
   footerText: { textAlign: 'center', fontSize: 12, color: COLORS.darkGray, marginTop: 15 },

@@ -8,10 +8,7 @@ import { useDataStore } from 'zustand/data.store';
 
 export const CardEvent = ({ event }: any) => {
   const navigation: any = useNavigation();
-  // Get the event favorites and the toggle function from the store
   const { favoriteEvents, toggleEventFavorite } = useDataStore();
-
-  // Check if the current event is favorited
   const isFavorite = favoriteEvents.includes(event.id);
 
   const handleCardPress = () => {

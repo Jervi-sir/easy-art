@@ -16,24 +16,12 @@ const Feature = ({ text }) => (
 
 const WelcomeScreen = () => {
   const navigation: any = useNavigation();
-
-  // Use replace to ensure the user can't go "back" to the welcome screen
-  const goToAuth = () => {
-    navigation.replace(Routes.AuthScreen);
-  };
-
-  // --- UPDATED: Handlers for each button ---
   const handleGetStarted = () => {
-    // Navigate to AuthScreen and tell it to show the 'signup' tab
     navigation.replace(Routes.AuthScreen, { initialTab: 'signup' });
   };
-
   const handleAlreadyHaveAccount = () => {
-    // Navigate to AuthScreen and tell it to show the 'login' tab
     navigation.replace(Routes.AuthScreen, { initialTab: 'login' });
   };
-
-
   return (
     <LinearGradient colors={[COLORS.primary, COLORS.primaryLight]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>

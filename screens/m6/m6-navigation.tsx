@@ -9,17 +9,12 @@ import { useDataStore } from 'zustand/data.store';
 
 const M6Navigation = () => {
   const navigation: any = useNavigation();
-  // Get state and actions from the stores
   const { user, logout } = useAuthStore();
   const { creations } = useDataStore();
-  const { resetData } = useDataStore(); // Get the reset function from the store
-
-  // --- Memoize stat calculations for performance ---
+  const { resetData } = useDataStore(); 
   const totalLikes = useMemo(() => {
     return creations.reduce((sum, item) => sum + item.likes, 0);
   }, [creations]);
-
-  // --- Functional Logout Handler ---
   const handleLogout = () => {
     Alert.alert(
       "Déconnexion",
@@ -30,9 +25,6 @@ const M6Navigation = () => {
       ]
     );
   };
-
-
-  // --- Component for the status badge ---
   const StatusBadge = ({ isPremium }: any) => (
     <View style={[styles.statusBadge, isPremium ? styles.premiumBadge : styles.standardBadge]}>
       <Text style={isPremium ? styles.premiumText : styles.standardText}>
@@ -46,7 +38,6 @@ const M6Navigation = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <Text style={styles.screenTitle}>Mon Profil</Text>
-
         {/* --- DYNAMIC Profile Card --- */}
         <View style={styles.card}>
           <Image
@@ -101,7 +92,7 @@ const M6Navigation = () => {
             </TouchableOpacity>
           </View>
           <FlatList
-            data={creations} // Use data from the store
+            data={creations}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={item => item.id}
@@ -190,28 +181,11 @@ const styles = StyleSheet.create({
   menuText: { flex: 1, marginLeft: 15, fontSize: 16, fontWeight: '500' },
   logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: 20, marginTop: 20, backgroundColor: '#FFE5E5', padding: 15, borderRadius: 15 },
   logoutText: { color: COLORS.red, fontSize: 16, fontWeight: 'bold', marginLeft: 10 },
-  // --- NEW STYLES FOR THE STATUS BADGE ---
-  statusBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  premiumBadge: {
-    backgroundColor: COLORS.green,
-  },
-  standardBadge: {
-    backgroundColor: COLORS.lightGray,
-  },
-  premiumText: {
-    color: COLORS.white,
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  standardText: {
-    color: COLORS.darkGray,
-    fontWeight: 'bold',
-    fontSize: 12,
-  }
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, },
+  premiumBadge: { backgroundColor: COLORS.green, },
+  standardBadge: { backgroundColor: COLORS.lightGray, },
+  premiumText: { color: COLORS.white, fontWeight: 'bold', fontSize: 12, },
+  standardText: { color: COLORS.darkGray, fontWeight: 'bold', fontSize: 12, }
 
 });
 

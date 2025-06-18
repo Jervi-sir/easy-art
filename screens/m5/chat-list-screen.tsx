@@ -6,17 +6,15 @@ import { Routes } from '@utils/constants/Routes';
 import { useDataStore } from 'zustand/data.store';
 
 const ChatListScreen = () => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
   const { artists, chats } = useDataStore();
-
-  // Get a list of artists the user is chatting with
   const chatPartners = Object.keys(chats).map(artistId => {
     const artist = artists.find(a => a.id === artistId);
     const lastMessage = chats[artistId]?.[0];
     return { artist, lastMessage };
-  }).filter(p => p.artist); // Filter out any potential mismatches
+  }).filter(p => p.artist);
 
-  const renderChatItem = ({ item }) => (
+  const renderChatItem = ({ item }: any) => (
     <TouchableOpacity style={styles.chatItem} onPress={() => navigation.navigate(Routes.ChatScreen, { artist: item.artist })}>
       <Image source={{ uri: item.artist.image }} style={styles.avatar} />
       <View style={styles.chatPreview}>
@@ -34,12 +32,11 @@ const ChatListScreen = () => {
       <FlatList
         data={chatPartners}
         renderItem={renderChatItem}
-        keyExtractor={item => item.artist.id}
+        keyExtractor={(item: any) => item.artist.id}
       />
     </SafeAreaView>
   );
 };
-// Styles for ChatListScreen
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   header: { padding: 20, borderBottomWidth: 1, borderBottomColor: COLORS.lightGray },

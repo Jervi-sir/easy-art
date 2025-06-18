@@ -13,9 +13,7 @@ const FILTERS = ['Tout', 'Art Visuel', 'Musique', 'Cinéma', 'Théâtre'];
 const M3Navigation = () => {
   const [activeFilter, setActiveFilter] = useState('Tout');
   const navigation: any = useNavigation();
-  const { events } = useDataStore(); // Get events from the store
-
-  // Memoize the filtered list for better performance
+  const { events } = useDataStore();
   const filteredEvents = useMemo(() => {
     if (activeFilter === 'Tout') {
       return events;

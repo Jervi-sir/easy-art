@@ -30,7 +30,6 @@ const HelpCenterScreen = () => {
     </View>
   );
 };
-// Use same styles from EditProfileScreen where applicable
 const styles = StyleSheet.create({
   container: { padding: 20, backgroundColor: COLORS.background },
   header: { flexDirection: 'row', alignItems: 'center', gap: 20, paddingHorizontal: 20, backgroundColor: COLORS.primary, paddingTop: Platform.OS === 'android' ? 30 : 20, paddingBottom: 15 },

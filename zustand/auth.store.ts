@@ -7,7 +7,7 @@ interface User {
   id: string;
   fullName: string;
   email: string;
-  password: string; // Make password required
+  password: string;
   phoneNumber: string;
   address: string;
   isPremium: boolean;
@@ -46,8 +46,6 @@ export const useAuthStore = create<AuthState>()(
       login: async ({ email, pass }) => {
         const users = get().users;
         console.log('users: ', users);
-
-        // Validate inputs
         if (!email || !pass) {
           Alert.alert('Erreur', 'Veuillez fournir un email et un mot de passe.');
           return false;
@@ -73,14 +71,10 @@ export const useAuthStore = create<AuthState>()(
 
       signup: async (userData) => {
         const { fullName, email, password, phoneNumber, address } = userData;
-
-        // Validate all required fields
         if (!fullName || !email || !password || !phoneNumber || !address) {
           Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
           return false;
         }
-
-        // Validate email format (basic check)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
           Alert.alert('Erreur', 'Veuillez fournir une adresse email valide.');
@@ -88,7 +82,6 @@ export const useAuthStore = create<AuthState>()(
         }
 
         const users = get().users;
-        // Check if user already exists
         if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
           Alert.alert('Erreur', 'Un compte avec cet email existe déjà.');
           return false;
@@ -98,7 +91,7 @@ export const useAuthStore = create<AuthState>()(
           id: Date.now().toString(),
           fullName,
           email,
-          password, // Explicitly include password
+          password,
           phoneNumber,
           address,
           isPremium: false,

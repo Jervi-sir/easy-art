@@ -10,8 +10,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@utils/constants/colors';
 import { useNavigation } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker'; // Import Image Picker
-import { Routes } from '@utils/constants/Routes'; // Import Routes for navigation
+import * as ImagePicker from 'expo-image-picker';
+import { Routes } from '@utils/constants/Routes';
 import { useAuthStore } from 'zustand/auth.store';
 import { useDataStore } from 'zustand/data.store';
 import { formatDateInput } from '@utils/format-input-date';
@@ -22,7 +22,6 @@ const CreateEventScreen = () => {
   const navigation: any = useNavigation();
   const { user } = useAuthStore();
   const { addEvent } = useDataStore();
-  // --- Get ALL form state and actions from the new Zustand store ---
   const {
     eventName, setEventName,
     address, setAddress,
@@ -33,9 +32,8 @@ const CreateEventScreen = () => {
     maxParticipants, setMaxParticipants,
     date, setDate,
     time, setTime,
-    clearForm // Get the clear function
+    clearForm
   } = useEventFormStore();
-  // --- UI state for showing the picker remains local ---
   const [showPicker, setShowPicker] = useState(false);
   const [pickerMode, setPickerMode] = useState<'date' | 'time'>('date');
 
@@ -73,9 +71,7 @@ const CreateEventScreen = () => {
     }
   };
 
-  // --- Functional Image Picker ---
   const handlePickImage = async () => {
-    // Request permission to access the media library
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
       Alert.alert("Permission Refusée", "Vous devez autoriser l'accès à votre galerie pour choisir une image.");
@@ -94,7 +90,6 @@ const CreateEventScreen = () => {
     }
   };
 
-  // --- Functional Event Creation Handler ---
   const handleCreateEvent = () => {
     if (!user?.isPremium) {
       Alert.alert("Abonnement Premium Requis", "Seuls les membres Premium peuvent créer des événements.", [{ text: "Annuler", style: "cancel" }, { text: "Voir Premium", onPress: () => navigation.navigate(Routes.M5) }]);
@@ -123,7 +118,7 @@ const CreateEventScreen = () => {
     });
 
     Alert.alert("Succès!", "Votre événement a été créé.");
-    clearForm(); // --- CLEAR THE PERSISTED FORM DATA AFTER SUBMISSION ---
+    clearForm();
     navigation.goBack();
   };
 
@@ -197,7 +192,7 @@ const CreateEventScreen = () => {
               <TextInput placeholder="Décrivez votre événement..." style={styles.textArea} value={description} onChangeText={setDescription} multiline numberOfLines={4} />
             </View>
 
-            {/* --- UPDATED Pricing & Capacity Section --- */}
+            {/* --- Pricing & Capacity Section --- */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Tarif et Capacité</Text>
               <View style={[styles.row, { gap: 10 }]}>

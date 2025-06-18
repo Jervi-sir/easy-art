@@ -14,7 +14,6 @@ const CategoryEventsScreen = () => {
 
   const { events } = useDataStore();
 
-  // Filter events based on the category name passed through navigation
   const filteredEvents = useMemo(() => {
     return events.filter(event => event.category === categoryName);
   }, [events, categoryName]);
@@ -49,16 +48,7 @@ const CategoryEventsScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGray,
-    paddingTop: Platform.OS === 'android' ? 40 : 10,
-  },
+  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, paddingVertical: 10, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.lightGray, paddingTop: Platform.OS === 'android' ? 40 : 10, },
   backButton: { padding: 5 },
   headerTitle: { fontSize: 20, fontWeight: 'bold', marginLeft: 15 },
   scrollContainer: { padding: 20 },

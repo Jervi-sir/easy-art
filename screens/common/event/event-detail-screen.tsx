@@ -20,7 +20,6 @@ const EventDetailScreen = () => {
   const seatsLeft = event.maxParticipants - event.participants;
   const progressPercentage = (event.participants / event.maxParticipants) * 100;
 
-
   return (
     <View style={styles.container}>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false}>

@@ -43,7 +43,6 @@ const ChatScreen = () => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        // This offset helps prevent the keyboard from covering the input on iOS
         keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
       >
         <View style={styles.header}>
@@ -56,7 +55,7 @@ const ChatScreen = () => {
         <FlatList
           data={messages}
           renderItem={renderMessage}
-          keyExtractor={item => item._id.toString()} // Ensure key is a string
+          keyExtractor={item => item._id.toString()}
           inverted
           style={styles.messageList}
           contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -80,87 +79,21 @@ const ChatScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightGray,
-    backgroundColor: COLORS.background
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 15
-  },
-  messageList: {
-    flex: 1,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.lightGray,
-    backgroundColor: COLORS.white
-  },
-  input: {
-    flex: 1,
-    height: 44,
-    backgroundColor: COLORS.gray,
-    borderRadius: 22,
-    paddingHorizontal: 18,
-    fontSize: 16,
-  },
-  sendButton: {
-    marginLeft: 10,
-    backgroundColor: COLORS.primary,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  messageRow: {
-    flexDirection: 'row',
-    marginVertical: 4,
-  },
-  myMessageRow: {
-    justifyContent: 'flex-end',
-  },
-  theirMessageRow: {
-    justifyContent: 'flex-start'
-  },
-  messageBubble: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    maxWidth: '75%',
-  },
-  myMessageBubble: {
-    backgroundColor: COLORS.primary,
-    borderBottomRightRadius: 5,
-  },
-  theirMessageBubble: {
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.lightGray,
-    borderBottomLeftRadius: 5,
-  },
-  myMessageText: {
-    color: COLORS.white,
-    fontSize: 16,
-  },
-  theirMessageText: {
-    color: COLORS.black,
-    fontSize: 16,
-  },
+  container: { flex: 1, backgroundColor: COLORS.background },
+  header: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 15, borderBottomWidth: 1, borderBottomColor: COLORS.lightGray, backgroundColor: COLORS.background },
+  headerTitle: { fontSize: 18, fontWeight: 'bold', marginLeft: 15 },
+  messageList: { flex: 1, },
+  inputContainer: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 8, borderTopWidth: 1, borderTopColor: COLORS.lightGray, backgroundColor: COLORS.white },
+  input: { flex: 1, height: 44, backgroundColor: COLORS.gray, borderRadius: 22, paddingHorizontal: 18, fontSize: 16, },
+  sendButton: { marginLeft: 10, backgroundColor: COLORS.primary, width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
+  messageRow: { flexDirection: 'row', marginVertical: 4, },
+  myMessageRow: { justifyContent: 'flex-end', },
+  theirMessageRow: { justifyContent: 'flex-start' },
+  messageBubble: { paddingVertical: 10, paddingHorizontal: 15, borderRadius: 20, maxWidth: '75%', },
+  myMessageBubble: { backgroundColor: COLORS.primary, borderBottomRightRadius: 5, },
+  theirMessageBubble: { backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.lightGray, borderBottomLeftRadius: 5, },
+  myMessageText: { color: COLORS.white, fontSize: 16, },
+  theirMessageText: { color: COLORS.black, fontSize: 16, },
 });
 
 export default ChatScreen;

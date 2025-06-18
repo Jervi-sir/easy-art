@@ -7,10 +7,8 @@ import { Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useDataStore } from 'zustand/data.store';
 
 export const CardHorizontal1 = ({ artist, deleteFunction = undefined }: any) => {
-  // Get favorite state and the function to change it from the store
   const { favorites, toggleFavorite } = useDataStore();
   const navigation: any = useNavigation();
-  // Check if the current artist is in the favorites list
   const isFavorite = favorites.includes(artist.id);
 
   return (
@@ -40,7 +38,7 @@ export const CardHorizontal1 = ({ artist, deleteFunction = undefined }: any) => 
 
       <View>
         {/* --- FAVORITE BUTTON (HEART ICON) --- */}
-        {!deleteFunction && ( // Only show the heart if the trash icon isn't present
+        {!deleteFunction && (
           <View style={{ flexDirection: 'column', justifyContent: 'space-between', gap: 30 }}>
             <TouchableOpacity
               onPress={() => toggleFavorite(artist.id)}
@@ -57,7 +55,7 @@ export const CardHorizontal1 = ({ artist, deleteFunction = undefined }: any) => 
             </TouchableOpacity>
           </View>
         )}
-        {/* --- DELETE BUTTON (TRASH ICON) --- */}
+        {/* --- DELETE BUTTON --- */}
         {deleteFunction && (
           <TouchableOpacity
             onPress={deleteFunction}

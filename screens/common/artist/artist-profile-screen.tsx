@@ -11,7 +11,6 @@ const ArtistProfileScreen = () => {
   const route = useRoute();
   // @ts-ignore
   const { artist } = route.params;
-
   const { events, creations, favorites, toggleFavorite } = useDataStore();
 
   const isFavorite = favorites.includes(artist.id);
@@ -72,7 +71,6 @@ const ArtistProfileScreen = () => {
   );
 };
 
-// Add comprehensive styles for the new screen
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   headerBackground: { padding: 20, paddingTop: 50, alignItems: 'center' },

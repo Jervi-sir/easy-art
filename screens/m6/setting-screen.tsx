@@ -9,9 +9,7 @@ import { useDataStore } from 'zustand/data.store';
 
 const SettingsScreen = () => {
   const navigation: any = useNavigation();
-  // Get state and actions from the settings store
   const { notifications, darkMode, setNotifications, toggleTheme } = useSettingsStore();
-  const { resetData } = useDataStore(); // Get the reset function from the store
 
   const handleComingSoon = () => {
     Alert.alert("Prochainement", "Cette fonctionnalité sera bientôt disponible.");
@@ -58,7 +56,6 @@ const SettingsScreen = () => {
   );
 };
 
-// Re-usable SettingsRow component (no changes needed)
 // @ts-ignore
 const SettingsRow: any = ({ icon, title, onPress, isSwitch, switchValue, onSwitchChange, hasChevron, value }) => {
   return (

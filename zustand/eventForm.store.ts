@@ -10,8 +10,8 @@ interface EventFormState {
   price: string;
   imageUri: string | null;
   maxParticipants: string;
-  date: string; // Store as ISO string for serialization
-  time: string; // Store as ISO string
+  date: string;
+  time: string;
 
   setEventName: (name: string) => void;
   setAddress: (address: string) => void;
@@ -22,7 +22,7 @@ interface EventFormState {
   setMaxParticipants: (count: string) => void;
   setDate: (date: string) => void;
   setTime: (time: string) => void;
-  clearForm: () => void; // Function to reset the form
+  clearForm: () => void;
 }
 
 const initialState = {
@@ -50,10 +50,10 @@ export const useEventFormStore = create<EventFormState>()(
       setMaxParticipants: (count) => set({ maxParticipants: count }),
       setDate: (date) => set({ date: date }),
       setTime: (time) => set({ time: time }),
-      clearForm: () => set(initialState), // Resets all fields to their initial values
+      clearForm: () => set(initialState),
     }),
     {
-      name: 'event-form-storage', // Unique name for this store's storage
+      name: 'event-form-storage',
       storage: createJSONStorage(() => AsyncStorage),
     }
   )

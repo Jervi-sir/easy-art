@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 const M1Navigation = () => {
   const { categories, artists } = useDataStore();
   const { user } = useAuthStore();
-  const recommendedArtists = artists.slice(0, 3); // Get first 3 for recommendation
+  const recommendedArtists = artists.slice(0, 3);
   const navigation: any = useNavigation();
   return (
     <ScrollView bounces={false} showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: COLORS.gray }}>
@@ -56,13 +56,12 @@ const M1Navigation = () => {
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            // --- THIS TouchableOpacity is now functional ---
             <TouchableOpacity
               style={{
                 padding: 8, borderRadius: 15, alignItems: 'center', marginTop: 10,
                 shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 5,
                 elevation: 3, 
-              }} // Using styles for cleanliness
+              }} 
               onPress={() => navigation.navigate(Routes.CategoryEventsScreen, { categoryName: item.name })}
             >
               <View style={{

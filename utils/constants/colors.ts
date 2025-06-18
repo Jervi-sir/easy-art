@@ -1,6 +1,6 @@
 export const COLORS = {
   background: '#F9F9FB',
-  primary: '#5D3FD3', // A shade of purple
+  primary: '#5D3FD3',
   primaryLight: '#7B68EE',
   secondary: '#FF6347',
   white: '#FFFFFF',

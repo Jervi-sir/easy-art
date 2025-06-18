@@ -10,9 +10,8 @@ const FILTERS = ['Tout', 'Musique', 'Art Visuel', 'Photographie', 'Cuisine', 'Ci
 const M2Navigation = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('Tout');
-  const { artists } = useDataStore(); // Get artists from the store
+  const { artists } = useDataStore(); 
 
-  // useMemo will re-calculate the filtered list only when data changes, improving performance
   const filteredArtists = useMemo(() => {
     return artists.filter(artist => {
       const matchesCategory = activeFilter === 'Tout' || artist.category === activeFilter;

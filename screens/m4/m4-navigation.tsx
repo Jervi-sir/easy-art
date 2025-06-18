@@ -7,16 +7,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDataStore } from 'zustand/data.store';
 
 const M4Navigation = () => {
-  // --- 1. State to manage the active tab ---
-  const [activeTab, setActiveTab] = useState('artists'); // 'artists' or 'events'
-
-  // --- 2. Get ALL required data from the store ---
+  const [activeTab, setActiveTab] = useState('artists'); 
   const {
     artists, favorites, toggleFavorite,
     events, favoriteEvents, toggleEventFavorite
   } = useDataStore();
-
-  // --- 3. Filter data for BOTH lists ---
   const favoriteArtists = artists.filter(artist => favorites.includes(artist.id));
   const favoriteEventsData = events.filter(event => favoriteEvents.includes(event.id));
 
@@ -54,7 +49,6 @@ const M4Navigation = () => {
       <ScrollView contentContainerStyle={{ padding: 20, flexGrow: 1 }}>
         {/* --- 5. Conditional Rendering based on active tab --- */}
         {activeTab === 'artists' ? (
-          // --- Favorite Artists List ---
           favoriteArtists.length > 0 ? (
             favoriteArtists.map(artist => (
               <CardHorizontal1
@@ -69,7 +63,6 @@ const M4Navigation = () => {
             </View>
           )
         ) : (
-          // --- Favorite Events List ---
           favoriteEventsData.length > 0 ? (
             favoriteEventsData.map(event => (
               <CardEvent key={event.id} event={event} />

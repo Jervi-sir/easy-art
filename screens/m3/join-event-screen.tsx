@@ -11,14 +11,10 @@ const JoinEventScreen = ({ route }: any) => {
   const navigation: any = useNavigation();
   const { user } = useAuthStore();
   const event = route?.params?.event;
-
-  // State for all form inputs
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [portfolioFile, setPortfolioFile] = useState<DocumentPicker.DocumentPickerAsset | null>(null);
-
-  // Pre-fill user's name from the auth store
   useEffect(() => {
     if (user) {
       const nameParts = user.fullName.split(' ');
@@ -26,12 +22,10 @@ const JoinEventScreen = ({ route }: any) => {
       setLastName(nameParts.slice(1).join(' ') || '');
     }
   }, [user]);
-
-  // --- File Picker Functionality ---
   const handleSelectFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: '*/*', // Allow any file type
+        type: '*/*', 
       });
 
       if (!result.canceled) {
@@ -43,9 +37,7 @@ const JoinEventScreen = ({ route }: any) => {
     }
   };
 
-  // --- Submission Handler ---
   const handleJoinEvent = () => {
-    // Basic validation
     if (!firstName || !lastName || !birthDate) {
       Alert.alert("Champs manquants", "Veuillez remplir toutes vos informations personnelles.");
       return;
@@ -55,7 +47,6 @@ const JoinEventScreen = ({ route }: any) => {
       return;
     }
 
-    // Simulate submission
     Alert.alert(
       "Inscription Réussie!",
       `Merci, ${firstName}. Votre inscription à "${event.title}" avec le fichier "${portfolioFile.name}" a bien été reçue.`,
@@ -63,7 +54,6 @@ const JoinEventScreen = ({ route }: any) => {
     );
   };
 
-  // Guard clause if event data is missing
   if (!event) {
     return (
       <View style={styles.errorContainer}>

@@ -14,16 +14,14 @@ import { Routes } from '@utils/constants/Routes';
 
 const PaymentScreen = () => {
   const navigation: any = useNavigation();
-  const { user, upgradeToPremium } = useAuthStore(); // Get user and upgrade function
+  const { user, upgradeToPremium } = useAuthStore();
 
-  // Form state
   const [ccp, setCcp] = useState('');
   const [cle, setCle] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // For loading indicator
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Pre-fill form with user data from the store
   useEffect(() => {
     if (user) {
       setName(user.fullName);
@@ -31,29 +29,22 @@ const PaymentScreen = () => {
     }
   }, [user]);
 
-  // --- Handle the payment process ---
   const handlePayment = () => {
-    // 1. Basic validation
     if (!ccp.trim() || !cle.trim() || !name.trim() || !phone.trim()) {
       Alert.alert("Formulaire incomplet", "Veuillez remplir tous les champs de paiement.");
       return;
     }
 
     setIsLoading(true);
-
-    // 2. Simulate network delay for payment processing
     setTimeout(() => {
-      // 3. Update the user's status in the global store
       upgradeToPremium();
       setIsLoading(false);
-
-      // 4. Give feedback and navigate
       Alert.alert(
         "Paiement Réussi!",
         "Félicitations, vous êtes maintenant un membre Premium.",
-        [{ text: "Génial!", onPress: () => navigation.reset({ index: 0, routes: [{ name: Routes.NavigationScreen }] }) }] // Go back to the main tab screen
+        [{ text: "Génial!", onPress: () => navigation.reset({ index: 0, routes: [{ name: Routes.NavigationScreen }] }) }] 
       );
-    }, 2500); // 2.5-second delay
+    }, 2500); 
   };
 
   return (
@@ -146,7 +137,7 @@ const styles = StyleSheet.create({
   infoText: { flex: 1, marginLeft: 10, color: COLORS.blueInfoText, fontSize: 13 },
   footer: { padding: 20, backgroundColor: COLORS.white, borderTopWidth: 1, borderTopColor: '#f0f0f0' },
   payButton: { backgroundColor: COLORS.green, padding: 18, borderRadius: 15, alignItems: 'center', justifyContent: 'center', height: 58 },
-  payButtonDisabled: { backgroundColor: '#90D8A2' }, // Lighter green when disabled
+  payButtonDisabled: { backgroundColor: '#90D8A2' },
   payButtonText: { color: COLORS.white, fontSize: 16, fontWeight: 'bold' },
 });
 

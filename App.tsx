@@ -1,4 +1,4 @@
-import { SafeAreaView, ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
@@ -31,7 +31,6 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBarTop />
-      {/* Apply the theme to the entire navigator */}
       <NavigationContainer theme={darkMode ? DarkTheme : DefaultTheme}>
         <Navigation />
       </NavigationContainer>
@@ -46,7 +45,6 @@ const Navigation = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check if the app has been launched before
     AsyncStorage.getItem('alreadyLaunched').then(value => {
       if (value == null) {
         AsyncStorage.setItem('alreadyLaunched', 'true');
@@ -56,8 +54,6 @@ const Navigation = () => {
       }
     });
   }, []);
-
-  // Show a loading screen while checking for the first launch
   if (isFirstLaunch === null) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.primary }}>
@@ -77,7 +73,6 @@ const Navigation = () => {
       }}
     >
       {isAuthenticated ? (
-        // --- Screens accessible only when authenticated ---
         <>
           <Stack.Screen name={Routes.NavigationScreen} component={NavigationScreen} />
           {/* You can add other main app screens here that are not in the tab navigator */}

@@ -130,12 +130,11 @@ const AuthScreen = ({ route }: any) => {
   const [address, setAddress] = useState('');
 
   useEffect(() => {
-    // Check if an 'initialTab' parameter was passed
     const initialTab = route.params?.initialTab;
     if (initialTab) {
       setActiveTab(initialTab);
     }
-  }, [route.params?.initialTab]); // Re-run if the params change
+  }, [route.params?.initialTab]);
 
 
   const handleLogin = useCallback(async () => {
@@ -245,40 +244,17 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.white },
   scrollContent: { padding: 20, paddingTop: 50 },
   header: { alignItems: 'center', marginBottom: 30 },
-  appName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.primary,
-    marginTop: 10,
-  },
+  appName: { fontSize: 24, fontWeight: 'bold', color: COLORS.primary, marginTop: 10, },
   tagline: { fontSize: 16, color: COLORS.darkGray, marginTop: 5 },
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.gray,
-    borderRadius: 4,
-    padding: 5,
-    marginBottom: 20,
-  },
+  tabContainer: { flexDirection: 'row', backgroundColor: COLORS.gray, borderRadius: 4, padding: 5, marginBottom: 20, },
   tab: { flex: 1, paddingVertical: 12, borderRadius: 5, alignItems: 'center' },
   activeTab: { backgroundColor: COLORS.white },
   tabText: { color: COLORS.darkGray, fontSize: 16, fontWeight: '600' },
   activeTabText: { color: COLORS.primary },
-  input: {
-    backgroundColor: COLORS.gray,
-    padding: 20,
-    borderRadius: 5,
-    fontSize: 16,
-    marginBottom: 15,
-  },
+  input: { backgroundColor: COLORS.gray, padding: 20, borderRadius: 5, fontSize: 16, marginBottom: 15, },
   passwordContainer: { position: 'relative', justifyContent: 'center' },
   eyeIcon: { position: 'absolute', right: 20 },
-  mainButton: {
-    backgroundColor: COLORS.primary,
-    padding: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-  },
+  mainButton: { backgroundColor: COLORS.primary, padding: 18, borderRadius: 12, alignItems: 'center', marginTop: 10, },
   mainButtonText: { color: COLORS.white, fontSize: 18, fontWeight: 'bold' },
 });
 

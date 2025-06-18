@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { Alert } from 'react-native';
 
 // FAKE DATA
 const CATEGORIES = [
@@ -80,14 +79,14 @@ interface DataState {
   artists: typeof ARTISTS;
   events: typeof EVENTS;
   creations: typeof CREATIONS;
-  favorites: string[]; // Favorite Artists
-  favoriteEvents: string[]; // --- NEW: Favorite Events
+  favorites: string[];
+  favoriteEvents: string[];
   addEvent: (event: Omit<typeof EVENTS[0], 'id' | 'rating'>) => void;
   toggleFavorite: (artistId: string) => void;
-  toggleEventFavorite: (eventId: string) => void; // --- NEW: Function for event favorites
-  chats: { [artistId: string]: Message[] }; // To hold all conversations
+  toggleEventFavorite: (eventId: string) => void;
+  chats: { [artistId: string]: Message[] }; 
   sendMessage: (artistId: string, text: string) => void;
-  resetData: () => void; // --- NEW: Add the reset function to the interface
+  resetData: () => void; 
 
 }
 
@@ -117,7 +116,7 @@ const STORE_NAME = 'data-storage';
 export const useDataStore = create<DataState>()(
   persist(
     (set) => ({
-      ...initialState, // Spread the initial state
+      ...initialState, 
 
       addEvent: (event) => set((state) => ({
         events: [{ ...event, id: Date.now().toString(), rating: 4.0 }, ...state.events]
@@ -142,18 +141,14 @@ export const useDataStore = create<DataState>()(
           text,
           createdAt: new Date(),
           // @ts-ignore
-          user: { _id: 'currentUser' } // Assume the current user is the sender
+          user: { _id: 'currentUser' }
         };
-
-        // Add the user's new message
         set(state => {
           const newChats = { ...state.chats };
           const currentChat = newChats[artistId] ? [newMessage, ...newChats[artistId]] : [newMessage];
           newChats[artistId] = currentChat;
           return { chats: newChats };
         });
-
-        // --- Simulate a reply from the artist after 2 seconds ---
         setTimeout(() => {
           const artistReply: Message = {
             _id: Math.random(),
@@ -172,11 +167,9 @@ export const useDataStore = create<DataState>()(
       },
       resetData: async () => {
         try {
-          // 1. Remove this specific store's data from AsyncStorage
           await AsyncStorage.removeItem(STORE_NAME);
-          // 2. Reset the in-memory state back to the initial values
           // @ts-ignore
-          set(initialState, true); // The 'true' forcefully replaces the entire state
+          set(initialState, true); 
         } catch (error) {
           console.error("Error resetting data store:", error);
         }
