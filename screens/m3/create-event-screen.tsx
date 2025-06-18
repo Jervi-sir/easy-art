@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  Platform, Image, StyleSheet, Alert
+  Platform, Image, StyleSheet, Alert,
+  Pressable,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Keyboard
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '@utils/constants/colors';
@@ -10,21 +14,64 @@ import * as ImagePicker from 'expo-image-picker'; // Import Image Picker
 import { Routes } from '@utils/constants/Routes'; // Import Routes for navigation
 import { useAuthStore } from 'zustand/auth.store';
 import { useDataStore } from 'zustand/data.store';
+import { formatDateInput } from '@utils/format-input-date';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useEventFormStore } from 'zustand/eventForm.store';
 
 const CreateEventScreen = () => {
   const navigation: any = useNavigation();
-  // Connect to Zustand stores
   const { user } = useAuthStore();
   const { addEvent } = useDataStore();
+  // --- Get ALL form state and actions from the new Zustand store ---
+  const {
+    eventName, setEventName,
+    address, setAddress,
+    category, setCategory,
+    description, setDescription,
+    price, setPrice,
+    imageUri, setImageUri,
+    maxParticipants, setMaxParticipants,
+    date, setDate,
+    time, setTime,
+    clearForm // Get the clear function
+  } = useEventFormStore();
+  // --- UI state for showing the picker remains local ---
+  const [showPicker, setShowPicker] = useState(false);
+  const [pickerMode, setPickerMode] = useState<'date' | 'time'>('date');
 
-  // Form state
-  const [eventName, setEventName] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [address, setAddress] = useState('');
-  const [category, setCategory] = useState('Musique'); // Default value
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('100');
-  const [imageUri, setImageUri] = useState<string | null>(null); // State for the image URI
+  const togglePicker = (modeToShow: 'date' | 'time') => {
+    setShowPicker(true);
+    setPickerMode(modeToShow);
+  };
+
+  // @ts-ignore
+  const onChange = (event, selectedValue) => {
+    setShowPicker(Platform.OS === 'ios' ? true : false);
+    if (event.type === 'set') {
+      const currentValue = selectedValue || (pickerMode === 'date' ? new Date(date) : new Date(time));
+      if (pickerMode === 'date') {
+        setDate(currentValue.toISOString());
+      } else {
+        setTime(currentValue.toISOString());
+      }
+    }
+  };
+
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
+  // @ts-ignore
+  const onChangeDate = ({ type }, selectedDate) => {
+    if (type == "set") {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+      }
+    } else {
+      toggleDatePicker();
+    }
+  };
 
   // --- Functional Image Picker ---
   const handlePickImage = async () => {
@@ -49,109 +96,133 @@ const CreateEventScreen = () => {
 
   // --- Functional Event Creation Handler ---
   const handleCreateEvent = () => {
-    // 1. Check if user is premium
     if (!user?.isPremium) {
-      Alert.alert(
-        "Abonnement Premium Requis",
-        "Seuls les membres Premium peuvent créer des événements.",
-        [
-          { text: "Annuler", style: "cancel" },
-          // --- CHANGE THIS LINE ---
-          { text: "Voir Premium", onPress: () => navigation.navigate(Routes.M5) }
-        ]
-      );
+      Alert.alert("Abonnement Premium Requis", "Seuls les membres Premium peuvent créer des événements.", [{ text: "Annuler", style: "cancel" }, { text: "Voir Premium", onPress: () => navigation.navigate(Routes.M5) }]);
       return;
     }
 
-
-    // 2. Validate inputs
-    if (!eventName.trim() || !eventDate.trim() || !address.trim() || !description.trim() || !imageUri) {
+    if (!eventName.trim() || !address.trim() || !description.trim() || !imageUri || !maxParticipants.trim()) {
       Alert.alert("Formulaire Incomplet", "Veuillez remplir tous les champs et ajouter une photo.");
       return;
     }
 
-    // 3. Add event to the global store
     addEvent({
       title: eventName,
       description: description,
-      rating: 4.0, // Default rating for a new event
-      date: eventDate,
-      time: '20:00', // Default time
+      date: new Date(date).toLocaleDateString('fr-FR'),
+      time: new Date(time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
       location: address,
-      participants: 0,
-      maxParticipants: 50, // Default max participants
+      maxParticipants: parseInt(maxParticipants, 10) || 50,
       price: `${price} DA`,
-      image: imageUri, // Use the selected image
+      image: imageUri,
       category: category,
+      artistId: user.id,
+      participants: 0,
+      // @ts-ignore
+      rating: 4.0,
     });
 
-    // 4. Provide feedback and navigate back
-    Alert.alert("Succès!", "Votre événement a été créé et est maintenant visible.");
+    Alert.alert("Succès!", "Votre événement a été créé.");
+    clearForm(); // --- CLEAR THE PERSISTED FORM DATA AFTER SUBMISSION ---
     navigation.goBack();
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.white} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Créer un événement</Text>
-        </View>
+      {/* --- The single, reusable DateTimePicker component --- */}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1, backgroundColor: COLORS.white }}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
+        >
+          <ScrollView style={{ flex: 1 }} bounces={false} contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+            {/* Header */}
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>Créer un événement</Text>
+            </View>
 
-        {/* Photo Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Photo de l'événement *</Text>
-          <TouchableOpacity style={styles.imagePicker} onPress={handlePickImage}>
-            {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.imagePreview} />
-            ) : (
-              <>
-                <Ionicons name="camera-outline" size={32} color={COLORS.primary} />
-                <Text style={styles.imagePickerText}>Ajouter une photo</Text>
-                <Text style={styles.imagePickerSubtext}>Recommandé: 1200x800px</Text>
-              </>
-            )}
-          </TouchableOpacity>
-        </View>
+            {/* Photo Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Photo de l'événement *</Text>
+              <TouchableOpacity style={styles.imagePicker} onPress={handlePickImage}>
+                {imageUri ? (
+                  <Image source={{ uri: imageUri }} style={styles.imagePreview} />
+                ) : (
+                  <>
+                    <Ionicons name="camera-outline" size={32} color={COLORS.primary} />
+                    <Text style={styles.imagePickerText}>Ajouter une photo</Text>
+                    <Text style={styles.imagePickerSubtext}>Recommandé: 1200x800px</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
 
-        {/* Basic Info Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Informations de base</Text>
-          <Text style={styles.label}>Nom de l'événement *</Text>
-          <TextInput placeholder="Ex: Exposition de peinture moderne" style={styles.input} value={eventName} onChangeText={setEventName} />
+            {/* Basic Info Section */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Informations de base</Text>
+              <Text style={styles.label}>Nom de l'événement *</Text>
+              <TextInput placeholder="Ex: Exposition de peinture moderne" style={styles.input} value={eventName} onChangeText={setEventName} />
 
-          <Text style={styles.label}>Date de l'événement *</Text>
-          <TextInput placeholder="Ex: 25 Décembre 2025" style={styles.input} value={eventDate} onChangeText={setEventDate} />
+              {/* --- Date and Time Pickers --- */}
+              <View style={styles.row}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.label}>Date *</Text>
+                  <DateTimePicker
+                    mode={pickerMode}
+                    display="default"
+                    value={pickerMode === 'date' ? new Date(date) : new Date(time)}
+                    onChange={onChange}
+                    style={{ backgroundColor: '#f0f0f7', borderRadius: 10, height: 50 }}
+                  />
+                </View>
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                  <Text style={styles.label}>Heure *</Text>
+                  <Pressable onPress={() => togglePicker('time')}>
+                    <TextInput style={[styles.input, { paddingVertical: 8 }]} value={time} editable={false} />
+                  </Pressable>
+                </View>
+              </View>
 
-          <Text style={styles.label}>Adresse *</Text>
-          <TextInput placeholder="Ex: Centre culturel, Oran" style={styles.input} value={address} onChangeText={setAddress} />
+              <Text style={styles.label}>Adresse *</Text>
+              <TextInput placeholder="Ex: Centre culturel, Oran" style={styles.input} value={address} onChangeText={setAddress} />
 
-          <Text style={styles.label}>Catégorie *</Text>
-          <TextInput placeholder="Ex: Musique, Art Visuel" style={styles.input} value={category} onChangeText={setCategory} />
+              <Text style={styles.label}>Catégorie *</Text>
+              <TextInput placeholder="Ex: Musique, Art Visuel" style={styles.input} value={category} onChangeText={setCategory} />
 
-          <Text style={styles.label}>Description *</Text>
-          <TextInput placeholder="Décrivez votre événement..." style={styles.textArea} value={description} onChangeText={setDescription} multiline numberOfLines={4} />
-        </View>
+              <Text style={styles.label}>Description *</Text>
+              <TextInput placeholder="Décrivez votre événement..." style={styles.textArea} value={description} onChangeText={setDescription} multiline numberOfLines={4} />
+            </View>
 
-        {/* Pricing Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Tarification</Text>
-          <Text style={styles.label}>Prix d'inscription par participant (DA)</Text>
-          <TextInput style={styles.input} value={price} onChangeText={setPrice} keyboardType="numeric" />
-        </View>
+            {/* --- UPDATED Pricing & Capacity Section --- */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Tarif et Capacité</Text>
+              <View style={[styles.row, { gap: 10 }]}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.label}>Prix par participant (DA)</Text>
+                  <TextInput style={styles.input} value={price} onChangeText={setPrice} keyboardType="numeric" />
+                </View>
+                <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                  <Text style={styles.label}>Places max *</Text>
+                  <TextInput style={styles.input} value={maxParticipants} onChangeText={setMaxParticipants} keyboardType="numeric" />
+                </View>
+              </View>
+            </View>
 
-        {/* Footer Button */}
-        <View style={{ paddingHorizontal: 20, marginTop: 10 }}>
-          <TouchableOpacity style={styles.submitButton} onPress={handleCreateEvent}>
-            <Text style={styles.submitButtonText}>
-              {user?.isPremium ? "Publier l'événement" : "Créer (Abonnement Requis)"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            {/* Footer Button */}
+            <View style={{ paddingHorizontal: 20, marginTop: 10 }}>
+              <TouchableOpacity style={styles.submitButton} onPress={handleCreateEvent}>
+                <Text style={styles.submitButtonText}>
+                  {user?.isPremium ? "Publier l'événement" : "Créer (Abonnement Requis)"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
@@ -171,6 +242,8 @@ const styles = StyleSheet.create({
   imagePreview: { width: '100%', height: '100%', borderRadius: 13 },
   submitButton: { backgroundColor: COLORS.primary, padding: 18, borderRadius: 15, alignItems: 'center' },
   submitButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  row: { flexDirection: 'row', justifyContent: 'space-between' },
+
 });
 
 export default CreateEventScreen;

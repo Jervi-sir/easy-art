@@ -8,7 +8,6 @@ import { Routes } from '@utils/constants/Routes';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDataStore } from 'zustand/data.store';
 
-// You can get these from your categories in the store for more dynamism
 const FILTERS = ['Tout', 'Art Visuel', 'Musique', 'Cinéma', 'Théâtre'];
 
 const M3Navigation = () => {

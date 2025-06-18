@@ -24,6 +24,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b2b2be71-108a-4c09-85c7-e37d3f267600"
+      }
+    },
+    "owner": "jervi",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b2b2be71-108a-4c09-85c7-e37d3f267600"
     }
   }
 }

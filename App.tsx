@@ -18,6 +18,12 @@ import { useSettingsStore } from 'zustand/settings.store';
 import PaymentScreen from '@screens/common/payment/payment-screen';
 import EditProfileScreen from '@screens/m6/edit-profile-screen';
 import HelpCenterScreen from '@screens/m6/help-center-screen';
+import SubscriptionScreen from '@screens/m6/subscription-screen';
+import ChatScreen from '@screens/m5/chat-screen';
+import ChatListScreen from '@screens/m5/chat-list-screen';
+import ArtistProfileScreen from '@screens/common/artist/artist-profile-screen';
+import EventDetailScreen from '@screens/common/event/event-detail-screen';
+import CategoryEventsScreen from '@screens/common/event/category-events-screen';
 
 export default function App() {
   const { darkMode } = useSettingsStore();
@@ -64,6 +70,7 @@ const Navigation = () => {
     <Stack.Navigator
       id={undefined}
       screenOptions={{
+        // @ts-ignore
         lazy: true,
         headerShown: false,
         ...TransitionPresets.SlideFromRightIOS,
@@ -80,13 +87,19 @@ const Navigation = () => {
           <Stack.Screen name={Routes.PaymentScreen} component={PaymentScreen} />
           <Stack.Screen name={Routes.HelpCenterScreen} component={HelpCenterScreen} />
           <Stack.Screen name={Routes.EditProfileScreen} component={EditProfileScreen} />
+          <Stack.Screen name={Routes.SubscriptionScreen} component={SubscriptionScreen} />
+          <Stack.Screen name={Routes.ChatListScreen} component={ChatListScreen} />
+          <Stack.Screen name={Routes.ChatScreen} component={ChatScreen} />
+          <Stack.Screen name={Routes.ArtistProfileScreen} component={ArtistProfileScreen} />
+          <Stack.Screen name={Routes.EventDetailScreen} component={EventDetailScreen} />
+          <Stack.Screen name={Routes.CategoryEventsScreen} component={CategoryEventsScreen} />
         </>
       ) : (
         // --- Authentication flow screens ---
         <>
-          {isFirstLaunch && (
-            <Stack.Screen name={Routes.WelcomeScreen} component={WelcomeScreen} />
-          )}
+          {/* {isFirstLaunch && ( */}
+          <Stack.Screen name={Routes.WelcomeScreen} component={WelcomeScreen} />
+          {/* )} */}
           <Stack.Screen name={Routes.AuthScreen} component={AuthScreen} />
         </>
       )}

@@ -14,10 +14,15 @@ export const Routes = {
   JoinEvent: 'JoinEvent',
   CreateEventScreen: 'CreateEventScreen',
   SettingsScreen: 'SettingsScreen',
-PaymentScreen: 'PaymentScreen',
-EditProfileScreen: 'EditProfileScreen', 
+  PaymentScreen: 'PaymentScreen',
+  EditProfileScreen: 'EditProfileScreen',
   HelpCenterScreen: 'HelpCenterScreen',
-
+  SubscriptionScreen: 'SubscriptionScreen',
+  ChatListScreen: 'ChatListScreen',
+  ChatScreen: 'ChatScreen',
+  ArtistProfileScreen: 'ArtistProfileScreen',
+  EventDetailScreen: 'EventDetailScreen',
+  CategoryEventsScreen: 'CategoryEventsScreen',
 
   
 }

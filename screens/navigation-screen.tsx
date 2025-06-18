@@ -30,6 +30,7 @@ export const NavigationScreen = () => {
             backgroundColor: 'white',
             paddingTop: 5,
             height: Platform.OS === "ios" ? 80 : 60,
+            borderTopColor: COLORS.background
           },
           tabBarLabelStyle: {
             fontSize: 12,
